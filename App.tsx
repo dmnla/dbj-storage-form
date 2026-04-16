@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { Button } from './components/Button';
 import { Input } from './components/Input';
+import { TextArea } from './components/TextArea';
 import { submitStorageRequest } from './services/storageService';
 import { Step, FormData } from './types';
 
@@ -18,6 +19,7 @@ const initialData: FormData = {
   name: '',
   phone: '',
   bikeModel: '',
+  accessories: '',
   startDate: '',
   endDate: '',
   notes: ''
@@ -95,7 +97,7 @@ const App: React.FC = () => {
     setStep(prev => prev - 1);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     
     if (name === 'phone') {
@@ -272,10 +274,20 @@ const App: React.FC = () => {
                   onChange={handleInputChange}
                   autoFocus
                 />
+                
+                {/* Changed to TextArea for longer paragraph input */}
+                <TextArea 
+                  label="Aksesoris Terpasang" 
+                  name="accessories"
+                  placeholder="Sebutkan semua aksesoris yang menempel (e.g., Lampu depan, Speedometer, Tas sadel, Holder HP)..."
+                  value={formData.accessories}
+                  onChange={handleInputChange}
+                />
+                
                 <Input 
                   label="Catatan Khusus (Opsional)" 
                   name="notes"
-                  placeholder="Contoh: Pedal kiri lecet, ban belakang kempes"
+                  placeholder="Contoh: Lecet di frame kiri, ban belakang kempes"
                   value={formData.notes}
                   onChange={handleInputChange}
                 />
@@ -388,6 +400,12 @@ const App: React.FC = () => {
                   <span className="text-slate-400">Sepeda</span>
                   <span className="font-medium text-white">{formData.bikeModel}</span>
                 </div>
+                {formData.accessories && (
+                  <div className="flex justify-between mb-1">
+                    <span className="text-slate-400">Aksesoris</span>
+                    <span className="font-medium text-white text-right text-sm pl-4 whitespace-pre-wrap">{formData.accessories}</span>
+                  </div>
+                )}
                 <div className="flex flex-col gap-1 mt-2 pt-2 border-t border-slate-700">
                    <div className="flex justify-between items-start">
                     <span className="text-slate-400 text-sm">Periode</span>
@@ -419,33 +437,104 @@ const App: React.FC = () => {
             className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm transition-opacity" 
             onClick={() => setIsTermsOpen(false)}
           ></div>
-          <div className="relative w-full max-w-md bg-slate-900 rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-800 flex flex-col max-h-[90vh]">
-            <div className="p-6 border-b border-slate-800">
-              <h3 className="text-xl font-bold">Syarat & Ketentuan</h3>
+          <div className="relative w-full max-w-lg bg-slate-900 rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-800 flex flex-col max-h-[90vh]">
+            <div className="p-6 border-b border-slate-800 bg-slate-900 rounded-t-2xl sticky top-0 z-10">
+              <h3 className="text-xl font-bold text-white">Syarat & Ketentuan</h3>
+              <p className="text-xs text-slate-500 mt-1">Layanan Penitipan Sepeda</p>
             </div>
             
-            <div className="p-6 overflow-y-auto space-y-4 text-sm text-slate-300">
-              <p className="flex gap-3">
-                <span className="font-bold text-purple-500">1.</span>
-                Pembayaran harus diselesaikan sebelum penyerahan sepeda (drop-off).
+            <div className="p-6 overflow-y-auto space-y-6 text-sm text-slate-300">
+              <p className="text-slate-400 leading-relaxed">
+                Syarat dan Ketentuan ini ("Perjanjian") mengatur hubungan hukum antara Penyedia Jasa dan
+                Pelanggan sehubungan dengan penggunaan fasilitas penyimpanan sepeda. Dengan
+                menandatangani formulir pendaftaran atau menyetujui secara digital, Pelanggan dianggap telah
+                membaca, memahami, dan menyetujui seluruh ketentuan yang tercantum di bawah ini.
               </p>
-              <p className="flex gap-3">
-                <span className="font-bold text-purple-500">2.</span>
-                Keterlambatan pengambilan lebih dari 7 hari dikenakan denda IDR 50.000 per hari.
-              </p>
-              <p className="flex gap-3">
-                <span className="font-bold text-purple-500">3.</span>
-                Daily Bike Storage tidak bertanggung jawab atas kerusakan akibat force majeure (banjir, gempa, dll).
-              </p>
-              <p className="flex gap-3">
-                <span className="font-bold text-purple-500">4.</span>
-                Sepeda yang tidak diambil dalam 3 bulan setelah tanggal berakhir dapat dilelang untuk menutup biaya.
-              </p>
+
+              <section className="space-y-2">
+                <h4 className="font-bold text-white">PASAL 1. DEFINISI</h4>
+                <div className="text-xs space-y-1 text-slate-400">
+                  <p>Dalam Perjanjian ini, istilah-istilah di bawah ini memiliki arti sebagai berikut:</p>
+                  <ol className="list-decimal pl-4 space-y-1">
+                    <li><strong>"Penyedia Jasa"</strong> adalah Daily Bike Jakarta, suatu entitas usaha yang menyediakan fasilitas dan layanan penyimpanan sepeda.</li>
+                    <li><strong>"Pelanggan"</strong> adalah perorangan atau badan hukum yang menyerahkan sepeda miliknya untuk disimpan dan dikelola oleh Penyedia Jasa berdasarkan Perjanjian ini.</li>
+                    <li><strong>"Objek Titipan"</strong> adalah satu unit sepeda beserta komponen-komponen yang melekat padanya (attached components) yang diserahkan oleh Pelanggan kepada Penyedia Jasa.</li>
+                    <li><strong>"Masa Sewa"</strong> adalah periode waktu penyimpanan yang telah disepakati dan dibayar lunas oleh Pelanggan.</li>
+                  </ol>
+                </div>
+              </section>
+
+              <section className="space-y-2">
+                <h4 className="font-bold text-white">PASAL 2. TATA CARA PENERIMAAN DAN INSPEKSI (CHECK-IN)</h4>
+                <ol className="list-decimal pl-4 space-y-2 text-xs text-slate-400">
+                  <li>Setiap Objek Titipan yang akan masuk ke fasilitas penyimpanan wajib melalui proses inspeksi fisik dan dokumentasi visual yang dilakukan oleh staf Penyedia Jasa.</li>
+                  <li>Pelanggan wajib memberitahukan secara jujur, jelas, dan rinci mengenai segala cacat, kerusakan, atau kondisi khusus pada Objek Titipan sebelum diserahkan. Segala cacat yang tidak dilaporkan namun ditemukan di kemudian hari akan dianggap sebagai kondisi bawaan (pre-existing condition).</li>
+                  <li><strong>Kewajiban Pencatatan:</strong> Segala aksesoris berharga yang ditinggalkan pada sepeda <strong>WAJIB DICATAT</strong> secara rinci dalam Formulir Serah Terima (Check-in Form) atau terekam jelas dalam foto inspeksi awal.</li>
+                  <li>Penyedia Jasa <strong>tidak bertanggung jawab</strong> atas kehilangan aksesoris yang <strong>tidak tercatat</strong> dalam formulir atau tidak terekam dalam foto dokumentasi saat check-in.</li>
+                </ol>
+              </section>
+
+              <section className="space-y-2">
+                <h4 className="font-bold text-white">PASAL 3. MEKANISME PENYIMPANAN DAN HAK AKSES</h4>
+                <ol className="list-decimal pl-4 space-y-2 text-xs text-slate-400">
+                  <li>Layanan ini merupakan sewa ruang penyimpanan (storage slot) dengan sistem Valet Service.</li>
+                  <li>Selama Masa Sewa masih berlaku, Pelanggan berhak untuk mengambil Objek Titipan guna penggunaan sementara (ride) dan mengembalikannya ke fasilitas penyimpanan tanpa dikenakan biaya tambahan.</li>
+                  <li>Permintaan penyiapan Objek Titipan untuk penggunaan sebagaimana dimaksud dalam Ayat (2) wajib diberitahukan oleh Pelanggan kepada Penyedia Jasa selambat-lambatnya 1 (satu) hari sebelum waktu penggunaan (H-1) melalui saluran komunikasi resmi yang ditetapkan Penyedia Jasa.</li>
+                </ol>
+              </section>
+
+              <section className="space-y-2">
+                <h4 className="font-bold text-white">PASAL 4. BIAYA, PEMBAYARAN, DAN SANKSI KETERLAMBATAN</h4>
+                <ol className="list-decimal pl-4 space-y-2 text-xs text-slate-400">
+                  <li>Biaya penyimpanan wajib dilunasi di muka (prepaid) oleh Pelanggan sesuai dengan paket durasi yang dipilih.</li>
+                  <li>Apabila Pelanggan tidak mengambil Objek Titipan atau tidak memperpanjang Masa Sewa dalam jangka waktu maksimal 1 hari kalender setelah tanggal berakhirnya Masa Sewa (expiry date), maka Pelanggan dikenakan denda keterlambatan harian sebesar tarif normal harian yang berlaku.</li>
+                  <li>Dalam hal tunggakan biaya penyimpanan dan/atau denda belum dilunasi dalam jangka waktu lebih dari 30 (tiga puluh) hari kalender sejak tanggal jatuh tempo, maka Penyedia Jasa berhak sepenuhnya untuk menggunakan <strong>Hak Retensi</strong> (hak menahan barang) atas Objek Titipan sampai seluruh kewajiban pembayaran dilunasi oleh Pelanggan.</li>
+                </ol>
+              </section>
+
+              <section className="space-y-2">
+                <h4 className="font-bold text-white">PASAL 5. BATASAN TANGGUNG JAWAB (LIMITATION OF LIABILITY)</h4>
+                <ol className="list-decimal pl-4 space-y-2 text-xs text-slate-400">
+                  <li>Penyedia Jasa bertanggung jawab penuh atas keamanan fisik Objek Titipan (termasuk aksesoris yang tercatat) selama berada di dalam area fasilitas penyimpanan.</li>
+                  <li>Penyedia Jasa berkewajiban memberikan ganti rugi apabila terjadi kehilangan atau kerusakan fisik pada Objek Titipan yang terbukti secara sah dan meyakinkan disebabkan oleh kelalaian (negligence) atau kesalahan staf Penyedia Jasa.</li>
+                  <li>
+                    Menyimpang dari ketentuan Ayat (1) dan (2) Pasal ini, Penyedia Jasa <strong>dibebaskan dari segala tuntutan ganti rugi</strong> atas:
+                    <ul className="list-[lower-alpha] pl-4 mt-1 space-y-1">
+                      <li>Kerusakan kosmetik minor (seperti lecet halus) yang tidak terdeteksi pada saat inspeksi awal dikarenakan kondisi Objek Titipan yang kotor;</li>
+                      <li>Kerusakan fungsional yang timbul akibat keausan wajar (wear and tear), korosi alami, atau usia komponen (misal: ban kempes sendiri, baterai shifter habis/bocor, rantai berkarat);</li>
+                      <li>Kehilangan aksesoris kecil (loose items) yang tidak terdaftar dalam Formulir Serah Terima; dan</li>
+                      <li>Segala bentuk kerusakan atau kehilangan yang terjadi pada saat Objek Titipan digunakan oleh Pelanggan di luar area fasilitas Penyedia Jasa (On Ride).</li>
+                    </ul>
+                  </li>
+                </ol>
+              </section>
+
+              <section className="space-y-2">
+                <h4 className="font-bold text-white">PASAL 6. FORCE MAJEURE</h4>
+                <ol className="list-decimal pl-4 space-y-2 text-xs text-slate-400">
+                  <li>Force Majeure adalah peristiwa atau keadaan yang terjadi di luar kekuasaan dan kendali wajar Penyedia Jasa, yang tidak dapat diantisipasi, dan mengakibatkan Penyedia Jasa tidak dapat melaksanakan kewajibannya berdasarkan Perjanjian ini.</li>
+                  <li>Peristiwa yang dikategorikan sebagai Force Majeure meliputi namun tidak terbatas pada: a. Bencana alam; b. Kebakaran yang bukan disebabkan oleh kelalaian Penyedia Jasa; c. Perang, huru-hara, pemogokan massal; dan/atau d. Perubahan peraturan perundang-undangan.</li>
+                  <li>Dalam hal terjadi kerusakan atau musnahnya Objek Titipan yang disebabkan secara langsung oleh Force Majeure, Pelanggan dengan ini setuju untuk membebaskan Penyedia Jasa dari segala tuntutan ganti rugi, baik secara perdata maupun pidana.</li>
+                </ol>
+              </section>
+
+              <section className="space-y-2">
+                <h4 className="font-bold text-white">PASAL 7. PENGAMBILAN KEMBALI DAN PENGAKHIRAN PERJANJIAN</h4>
+                <ol className="list-decimal pl-4 space-y-2 text-xs text-slate-400">
+                  <li>Pengambilan Objek Titipan secara permanen (Check-out) sebagai tanda berakhirnya Perjanjian hanya dapat dilakukan oleh Pelanggan yang namanya terdaftar atau kuasanya yang sah dengan menunjukkan bukti kepemilikan tiket atau identitas asli.</li>
+                  <li>Penyedia Jasa berhak menolak penyerahan Objek Titipan apabila Pelanggan belum melunasi seluruh kewajiban biaya sewa, biaya jasa bengkel (jika ada), maupun denda keterlambatan yang timbul.</li>
+                </ol>
+              </section>
+
+              <section className="space-y-2">
+                <h4 className="font-bold text-white">PASAL 8. HUKUM YANG BERLAKU</h4>
+                <p className="text-xs text-slate-400">Perjanjian ini diatur, ditafsirkan, dan dilaksanakan berdasarkan hukum Negara Republik Indonesia.</p>
+              </section>
             </div>
 
             <div className="p-6 border-t border-slate-800 bg-slate-900 rounded-b-2xl">
-              <label className="flex items-center gap-3 mb-6 cursor-pointer group">
-                <div className={`w-6 h-6 rounded border flex items-center justify-center transition-colors ${agreedToTerms ? 'bg-purple-600 border-purple-600' : 'border-slate-600 group-hover:border-purple-500'}`}>
+              <label className="flex items-start gap-3 mb-6 cursor-pointer group">
+                <div className={`mt-0.5 min-w-[1.5rem] h-6 rounded border flex items-center justify-center transition-colors ${agreedToTerms ? 'bg-purple-600 border-purple-600' : 'border-slate-600 group-hover:border-purple-500'}`}>
                   {agreedToTerms && <Check className="w-4 h-4 text-white" />}
                 </div>
                 <input 
@@ -454,7 +543,9 @@ const App: React.FC = () => {
                   checked={agreedToTerms} 
                   onChange={(e) => setAgreedToTerms(e.target.checked)} 
                 />
-                <span className="text-slate-300 group-hover:text-white transition-colors">Saya menyetujui Syarat & Ketentuan</span>
+                <span className="text-xs leading-relaxed text-slate-300 group-hover:text-white transition-colors">
+                  Dengan ini saya menyatakan bahwa saya telah membaca, memahami isi, dan menyetujui untuk tunduk pada seluruh ketentuan yang tercantum dalam Syarat dan Ketentuan Layanan Penitipan Sepeda ini.
+                </span>
               </label>
 
               <div className="flex gap-3">

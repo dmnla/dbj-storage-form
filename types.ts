@@ -2,6 +2,7 @@ export interface StorageRequestData {
   name: string;
   phone: string;
   bikeModel: string;
+  accessories: string;
   startDate: string;
   endDate: string;
   notes: string;
@@ -14,6 +15,7 @@ export interface FormData {
   name: string;
   phone: string;
   bikeModel: string;
+  accessories: string;
   startDate: string;
   endDate: string;
   notes: string;

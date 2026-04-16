@@ -1,5 +1,6 @@
 {
   "name": "Registrasi Daily Bike Storage",
   "description": "Formulir pendaftaran pelanggan yang minimalis dan premium untuk layanan penyimpanan sepeda jangka panjang.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [],
+  "majorCapabilities": []
 }
